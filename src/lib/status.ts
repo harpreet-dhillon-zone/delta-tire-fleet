@@ -2,26 +2,30 @@
 // inspection screen can preview a status before it is saved.
 import type { AxleRole, Status, UnitClass } from './types'
 
-export const STATUS_META: Record<Status, { label: string; badge: string; fill: string }> = {
+export const STATUS_META: Record<Status, { label: string; badge: string; fill: string; accent: string }> = {
   critical: {
     label: 'Critical',
     badge: 'bg-red-50 text-red-800 border-red-300',
     fill: 'bg-red-600 text-white border-red-800',
+    accent: 'border-red-600',
   },
   warning: {
     label: 'Warning',
     badge: 'bg-amber-50 text-amber-900 border-amber-400',
     fill: 'bg-amber-400 text-amber-950 border-amber-600',
+    accent: 'border-amber-500',
   },
   no_data: {
     label: 'No data',
     badge: 'bg-slate-100 text-slate-700 border-slate-300',
     fill: 'bg-slate-200 text-slate-800 border-slate-400',
+    accent: 'border-slate-400',
   },
   ok: {
     label: 'OK',
     badge: 'bg-emerald-50 text-emerald-800 border-emerald-400',
     fill: 'bg-emerald-600 text-white border-emerald-800',
+    accent: 'border-emerald-600',
   },
 }
 
