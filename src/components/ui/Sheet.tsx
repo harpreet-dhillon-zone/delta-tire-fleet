@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 
 type SheetProps = {
   title: ReactNode
@@ -26,8 +27,9 @@ export function Sheet({ title, onClose, children, footer }: SheetProps) {
     }
   }, [])
 
-  return (
-    <div className="fixed inset-0 z-40 flex items-end md:items-stretch md:justify-end">
+  // Portal to <body> so parent spacing/transforms can't offset the overlay
+  return createPortal(
+    <div className="fixed inset-0 z-40 flex items-end">
       <div className="absolute inset-0 bg-slate-900/50" onClick={onClose} aria-hidden />
       <div
         ref={panel}
@@ -35,7 +37,7 @@ export function Sheet({ title, onClose, children, footer }: SheetProps) {
         aria-modal="true"
         tabIndex={-1}
         className="relative flex max-h-[92vh] w-full flex-col rounded-t-2xl bg-white shadow-xl outline-none
-          md:max-h-none md:w-[28rem] md:rounded-none"
+          md:absolute md:inset-y-0 md:right-0 md:max-h-none md:w-[28rem] md:rounded-none"
       >
         <div className="flex items-center justify-between gap-2 border-b border-slate-200 py-2 pl-4 pr-2">
           <h2 className="min-w-0 truncate text-xl font-bold text-slate-900">{title}</h2>
@@ -50,9 +52,10 @@ export function Sheet({ title, onClose, children, footer }: SheetProps) {
             </svg>
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto overscroll-contain p-4">{children}</div>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4">{children}</div>
         {footer && <div className="border-t border-slate-200 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">{footer}</div>}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
