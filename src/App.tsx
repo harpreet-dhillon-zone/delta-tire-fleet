@@ -1,9 +1,17 @@
-function App() {
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { AppShell } from './components/layout/AppShell'
+import { DashboardPage } from './pages/DashboardPage'
+import { NotFoundPage } from './pages/NotFoundPage'
+
+export default function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 text-slate-100">
-      <h1 className="text-2xl font-semibold">Delta Tire Fleet</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<AppShell />}>
+          <Route index element={<DashboardPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
-
-export default App
