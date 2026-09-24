@@ -5,8 +5,12 @@ import { EmptyState, ErrorState, Loading } from '../components/ui/States'
 import { UnitCards } from '../components/units/UnitCards'
 import { UNIT_KEYS, UnitFilters } from '../components/units/UnitFilters'
 import { UnitTable } from '../components/units/UnitTable'
+import { UNIT_SORT } from '../components/units/unitSort'
+import { SortPicker } from '../components/table/SortPicker'
 import { useDebounced } from '../hooks/useDebounced'
 import { useUrlFilters } from '../hooks/useUrlFilters'
+import { useUrlSort } from '../hooks/useUrlSort'
+import { sortRows } from '../lib/sort'
 import { api } from '../lib/api'
 import { qk } from '../lib/queryKeys'
 import type { UnitFilters as Filters } from '../lib/types'
@@ -14,6 +18,7 @@ import type { UnitFilters as Filters } from '../lib/types'
 export function UnitsPage() {
   const filters = useUrlFilters(UNIT_KEYS)
   const search = useDebounced(filters.values.search)
+  const { sort, dir, setSort, toggle } = useUrlSort(Object.keys(UNIT_SORT))
   const query: Filters = {
     search,
     carrier_id: filters.values.carrier_id ? Number(filters.values.carrier_id) : undefined,
@@ -24,6 +29,8 @@ export function UnitsPage() {
     queryFn: () => api.units(query),
     placeholderData: (prev) => prev,
   })
+
+  const sorted = units ? sortRows(units, sort ? UNIT_SORT[sort].value : undefined, dir) : []
 
   return (
     <div className="space-y-4">
@@ -40,8 +47,13 @@ export function UnitsPage() {
           <p className="mb-2 text-base text-slate-600" aria-live="polite">
             {units.length} {units.length === 1 ? 'unit' : 'units'}
           </p>
-          <div className="md:hidden"><UnitCards units={units} /></div>
-          <div className="hidden md:block"><UnitTable units={units} /></div>
+          <div className="space-y-3 md:hidden">
+            <SortPicker spec={UNIT_SORT} defaultLabel="Worst first" sort={sort} dir={dir} onChange={setSort} />
+            <UnitCards units={sorted} />
+          </div>
+          <div className="hidden md:block">
+            <UnitTable units={sorted} sort={sort} dir={dir} onSort={toggle} />
+          </div>
         </section>
       )}
     </div>

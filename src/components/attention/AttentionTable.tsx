@@ -1,11 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { fmtAge, fmtAgo, fmtDate, fmtTread, positionLabel } from '../../lib/format'
+import type { SortDir } from '../../lib/sort'
 import { ROLE_LABEL, severityToStatus } from '../../lib/status'
 import type { ReactNode } from 'react'
 import type { AttentionRow, Status } from '../../lib/types'
 import { columnHelper, DataTable, type Columns } from '../table/DataTable'
 import { StatusBadge } from '../ui/StatusBadge'
 import { StatusIcon } from '../ui/StatusIcon'
+import { ATTENTION_SORT } from './attentionSort'
 import { tireLink } from './AttentionCards'
 
 const helper = columnHelper<AttentionRow>()
@@ -58,10 +60,15 @@ const columns: Columns<AttentionRow> = [
   }),
 ] as Columns<AttentionRow>
 
-export function AttentionTable({ rows }: { rows: AttentionRow[] }) {
+const SORTABLE = Object.keys(ATTENTION_SORT)
+
+type Props = { rows: AttentionRow[]; sort: string | null; dir: SortDir; onSort: (column: string) => void }
+
+export function AttentionTable({ rows, sort, dir, onSort }: Props) {
   const navigate = useNavigate()
   return (
-    <DataTable caption="Tires needing attention, worst first" columns={columns} data={rows}
-      getRowId={(r) => String(r.tire_id)} onRowClick={(r) => navigate(tireLink(r))} />
+    <DataTable caption="Tires needing attention" columns={columns} data={rows}
+      getRowId={(r) => String(r.tire_id)} onRowClick={(r) => navigate(tireLink(r))}
+      sortable={SORTABLE} sort={sort} dir={dir} onSort={onSort} />
   )
 }

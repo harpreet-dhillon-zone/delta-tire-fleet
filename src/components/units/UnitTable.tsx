@@ -1,9 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { titleCase } from '../../lib/format'
+import type { SortDir } from '../../lib/sort'
 import type { UnitSummary } from '../../lib/types'
 import { columnHelper, DataTable, type Columns } from '../table/DataTable'
 import { MviBadge } from './MviBadge'
 import { UnitStatusBadge } from './UnitStatusBadge'
+import { UNIT_SORT } from './unitSort'
 
 const helper = columnHelper<UnitSummary>()
 
@@ -29,13 +31,18 @@ const columns = [
   helper.accessor('plate', { header: 'Plate', cell: (info) => info.getValue() ?? '—' }),
   helper.accessor('vin', { header: 'VIN', cell: (info) => <span className="font-mono text-sm">{info.getValue() ?? '—'}</span> }),
   helper.accessor('mvi_expiry', { header: 'MVI expiry', cell: (info) => <MviBadge expiry={info.getValue()} /> }),
-  helper.accessor('worst_severity', { header: 'Tires', cell: ({ row }) => <UnitStatusBadge unit={row.original} /> }),
+  helper.accessor('worst_severity', { header: 'Tire status', cell: ({ row }) => <UnitStatusBadge unit={row.original} /> }),
 ] as Columns<UnitSummary>
 
-export function UnitTable({ units }: { units: UnitSummary[] }) {
+const SORTABLE = Object.keys(UNIT_SORT)
+
+type Props = { units: UnitSummary[]; sort: string | null; dir: SortDir; onSort: (column: string) => void }
+
+export function UnitTable({ units, sort, dir, onSort }: Props) {
   const navigate = useNavigate()
   return (
-    <DataTable caption="Units, worst tire status first" columns={columns} data={units}
-      getRowId={(u) => String(u.id)} onRowClick={(u) => navigate(`/units/${u.id}`)} />
+    <DataTable caption="Units" columns={columns} data={units}
+      getRowId={(u) => String(u.id)} onRowClick={(u) => navigate(`/units/${u.id}`)}
+      sortable={SORTABLE} sort={sort} dir={dir} onSort={onSort} />
   )
 }
