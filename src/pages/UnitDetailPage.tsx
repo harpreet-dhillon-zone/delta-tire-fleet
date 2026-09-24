@@ -38,9 +38,14 @@ export function UnitDetailPage() {
           Inspection saved for {saved} {saved === 1 ? 'tire' : 'tires'}.
         </p>
       )}
-      <UnitHeader unit={unit} actions={tires.length > 0 && (
-        <ButtonLink to={`/units/${unit.id}/inspect`} variant="primary" className="w-full sm:w-auto">Inspect this unit</ButtonLink>
-      )} />
+      <UnitHeader unit={unit} actions={
+        <>
+          {tires.length > 0 && (
+            <ButtonLink to={`/units/${unit.id}/inspect`} variant="primary" className="flex-1 sm:flex-none">Inspect this unit</ButtonLink>
+          )}
+          <ButtonLink to={`/units/${unit.id}/edit`}>Edit unit</ButtonLink>
+        </>
+      } />
 
       <div className="flex items-baseline justify-between">
         <h2 className="text-xl font-bold">Tires</h2>

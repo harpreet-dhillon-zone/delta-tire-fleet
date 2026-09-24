@@ -21,6 +21,8 @@ export function UnitHeader({ unit, actions }: { unit: Unit; actions?: ReactNode 
         <div>
           <h1 className="text-3xl font-bold">{unit.unit_number}</h1>
           <p className="text-base text-slate-700">
+            {[unit.model_year, unit.make].filter(Boolean).join(' ')}
+            {(unit.model_year || unit.make) && ' · '}
             {unit.equipment_type || titleCase(unit.unit_class)}
             {unit.carrier && ` · ${unit.carrier}`}
           </p>

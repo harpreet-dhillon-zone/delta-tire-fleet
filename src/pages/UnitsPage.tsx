@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { ButtonLink } from '../components/ui/Button'
 import { PageHeader } from '../components/ui/PageHeader'
 import { EmptyState, ErrorState, Loading } from '../components/ui/States'
 import { UnitCards } from '../components/units/UnitCards'
@@ -26,7 +27,7 @@ export function UnitsPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Units" />
+      <PageHeader title="Units" actions={<ButtonLink to="/units/new" variant="primary">+ Add unit</ButtonLink>} />
       <UnitFilters {...filters} />
       {isPending ? (
         <Loading />

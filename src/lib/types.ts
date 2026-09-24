@@ -103,6 +103,9 @@ export interface Unit {
   carrier: string | null
   plate: string | null
   vin: string | null
+  // From migration 0002; absent until it is applied
+  make?: string | null
+  model_year?: number | null
   axle_layout: string
   mvi_expiry: string | null
   status: UnitStatus
@@ -263,6 +266,8 @@ export interface UnitInput {
   carrier_id?: number
   plate?: string
   vin?: string
+  make?: string
+  model_year?: number
   axle_layout: string
   mvi_expiry?: string
   status?: UnitStatus

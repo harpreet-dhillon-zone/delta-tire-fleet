@@ -4,6 +4,7 @@ import { DashboardPage } from './pages/DashboardPage'
 import { InspectPage } from './pages/InspectPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { UnitDetailPage } from './pages/UnitDetailPage'
+import { EditUnitPage, NewUnitPage } from './pages/UnitFormPage'
 import { UnitsPage } from './pages/UnitsPage'
 
 export default function App() {
@@ -13,7 +14,9 @@ export default function App() {
         <Route element={<AppShell />}>
           <Route index element={<DashboardPage />} />
           <Route path="units" element={<UnitsPage />} />
+          <Route path="units/new" element={<NewUnitPage />} />
           <Route path="units/:id" element={<UnitDetailPage />} />
+          <Route path="units/:id/edit" element={<EditUnitPage />} />
           <Route path="units/:id/inspect" element={<InspectPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
