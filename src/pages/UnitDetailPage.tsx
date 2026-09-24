@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { AxleDiagram } from '../components/axle/AxleDiagram'
 import { TireActionSheet } from '../components/tire/TireActionSheet'
 import { TireForm } from '../components/tire/TireForm'
@@ -16,6 +16,7 @@ import { qk } from '../lib/queryKeys'
 export function UnitDetailPage() {
   const id = Number(useParams().id)
   const { params, open, close, reset } = usePanelParams()
+  const saved = (useLocation().state as { saved?: number } | null)?.saved
   const { data, error, isPending, refetch } = useQuery({ queryKey: qk.unit(id), queryFn: () => api.unit(id) })
 
   if (isPending) return <Loading />
@@ -32,7 +33,14 @@ export function UnitDetailPage() {
   return (
     <div className="space-y-4">
       <ButtonLink to="/units" variant="ghost" className="-ml-2">← Units</ButtonLink>
-      <UnitHeader unit={unit} />
+      {saved !== undefined && (
+        <p role="status" className="rounded-xl border-2 border-emerald-400 bg-emerald-50 p-3 text-base font-semibold text-emerald-900">
+          Inspection saved for {saved} {saved === 1 ? 'tire' : 'tires'}.
+        </p>
+      )}
+      <UnitHeader unit={unit} actions={tires.length > 0 && (
+        <ButtonLink to={`/units/${unit.id}/inspect`} variant="primary" className="w-full sm:w-auto">Inspect this unit</ButtonLink>
+      )} />
 
       <div className="flex items-baseline justify-between">
         <h2 className="text-xl font-bold">Tires</h2>
@@ -47,7 +55,8 @@ export function UnitDetailPage() {
       ) : tireId !== null ? (
         <TirePanel key={tireId} tireId={tireId} status={selected} onClose={close}
           actions={
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
+              <ButtonLink to={`/units/${unit.id}/inspect#tire-${tireId}`} variant="primary">Inspect</ButtonLink>
               <Button onClick={() => open({ tire: String(tireId), action: 'move' })}>Move</Button>
               <Button onClick={() => open({ tire: String(tireId), action: 'edit' })}>Edit</Button>
             </div>
