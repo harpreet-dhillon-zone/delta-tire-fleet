@@ -1,0 +1,8 @@
+name = "delta-tire-fleet"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "delta-fleet-db"
+database_id = "286c3605-51cd-46c0-9245-f0be9360251b"
