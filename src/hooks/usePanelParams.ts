@@ -24,5 +24,8 @@ export function usePanelParams() {
     else navigate({ search: '' }, { replace: true })
   }, [navigate, location.state])
 
-  return { params, open, close }
+  // Close every panel, e.g. after a move when the tire has left this unit
+  const reset = useCallback(() => navigate({ search: '' }, { replace: true }), [navigate])
+
+  return { params, open, close, reset }
 }
